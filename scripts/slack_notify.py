@@ -14,6 +14,20 @@ CHECK_INTERVAL = 1800  # 30분마다 체크
 MILESTONES = {25, 50, 75, 100}
 
 
+def generate_report():
+    try:
+        import importlib.util, sys
+        spec = importlib.util.spec_from_file_location(
+            "generate_report",
+            "/home/adminsecure01/scripts/generate_report.py"
+        )
+        mod = importlib.util.load_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod.main()
+    except Exception as e:
+        return f"보고서 생성 실패: {e}"
+
+
 def git_push():
     base = "/home/adminsecure01"
     subprocess.run(["git", "-C", base, "add",
@@ -50,11 +64,12 @@ def main():
                     notified_milestones.add(m)
                     if m == 100:
                         git_push()
+                        doc_url = generate_report()
                         send_slack(
                             f"🎉 *Whisper 전사 완료!*\n"
                             f"완료: {done}개 / 실패: {failed}개\n"
-                            f"결과: `data/whisper_dataset.csv`\n"
-                            f"📦 GitHub에 자동 업로드 완료!"
+                            f"📦 GitHub 업로드 완료\n"
+                            f"📄 Google Docs 보고서: {doc_url}"
                         )
                     else:
                         send_slack(

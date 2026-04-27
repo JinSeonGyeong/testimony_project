@@ -12,3 +12,4 @@ __pycache__/
 *.pyc
 .env
 .slack_webhook
+.google_credentials.json
