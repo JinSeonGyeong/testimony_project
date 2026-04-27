@@ -1,0 +1,14 @@
+# 대용량 데이터 제외
+data/subs/
+data/whisper/
+/tmp/
+
+# 로그 (progress.md는 포함)
+logs/subtitle_download.log
+logs/whisper_run.log
+
+# 시스템
+__pycache__/
+*.pyc
+.env
+.slack_webhook
